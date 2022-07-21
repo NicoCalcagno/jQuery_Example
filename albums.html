@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts Management</title>
+    <title>Album Management</title>
 </head>
 
 <body>
@@ -20,17 +20,17 @@
                         <a class="nav-link" aria-current="page" href="index.html">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="posts.html">Posts</a>
+                        <a class="nav-link" href="posts.html">Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="albums.html">Albums</a>
+                        <a class="nav-link active" href="albums.html">Albums</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div style="width: 50%; margin-left: auto; margin-right: auto; margin-top: 20px;">
+    <div style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px;">
 
         <nav aria-label="pagination Example">
             <ul class="pagination pagination-sm">
@@ -47,7 +47,8 @@
             </ul>
         </nav>
 
-        <div id="listPosts">
+
+        <div id="listAlbums">
 
         </div>
     </div>
@@ -56,75 +57,73 @@
         $(document).ready(function () {
             var pageInit = 1;
             var pageDim = 10;
-            getPosts(pageInit, pageDim);
+            getAlbums(pageInit, pageDim);
         });
 
-        function getPosts(pageInit, pageDim) {
+        function getAlbums(pageInit, pageDim) {
             $.ajax({
-                url: 'https://jsonplaceholder.typicode.com/posts',
+                url: 'https://jsonplaceholder.typicode.com/albums',
                 method: 'GET',
                 success: function (data) {
-                    getComments(data, pageInit, pageDim);
+                    getPhotos(data, pageInit, pageDim);
                 },
                 error: function () {
-                    loadPostsError();
+                    loadAlbumsError();
                 }
             });
         }
 
-        function getComments(posts, pageInit, pageDim) {
+        function getPhotos(albums, pageInit, pageDim) {
             $.ajax({
-                url: 'https://jsonplaceholder.typicode.com/comments',
+                url: 'https://jsonplaceholder.typicode.com/photos',
                 method: 'GET',
                 success: function (data) {
-                    loadPosts(posts, pageInit, pageDim, data);
-                    var comments = data;
-                    return comments;
+                    loadAlbums(albums, pageInit, pageDim, data);
+                    var photos = data;
+                    return photos;
                 },
                 error: function () {
-                    loadCommentsError();
+                    loadPhotosError();
                 }
             });
         }
 
 
 
-        function loadPosts(data, page, dim, comments) {
-            var posts = data.slice((page - 1) * dim, page * dim);
+        function loadAlbums(data, page, dim, photos) {
+            var albums = data.slice((page - 1) * dim, page * dim);
             //console.log(comments[0]);
-            posts.forEach(post => {
+            albums.forEach(album => {
                 var col = "<div>" +
-                    "<div id=p" + post.id + " class='card mb-3 border-primary' style='width:100%; margin-left:auto; margin-right:auto;'>" +
+                    "<div id=p" + album.id + " class='card mb-3 border-primary' style='width:100%; margin-left:auto; margin-right:auto;'>" +
                     "<div class='card-body'>" +
-                    "<h5 class='card-title'>" + post.title + "</h5>" +
-                    "<p class='card-text'>" + post.body + "</p>" +
+                    "<h5 class='card-title'>" + album.title + "</h5>" +
                     "</div>" +
                     "<div class='card-body' style='text-align:right;'>" +
-                    "<a href='#' id=" + post.id + " class='card-link'>Comments <svg id=s" + post.id + " xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-down-short' viewBox='0 0 16 16' style='display:none;'>" +
+                    "<a href='#' id=" + album.id + " class='card-link'>Photos <svg id=s" + album.id + " xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-down-short' viewBox='0 0 16 16' style='display:none;'>" +
                     "<path fill-rule='evenodd' d = 'M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z' /></svg ></a> " +
                     "</div>" +
                     "</div>" +
                     "</div>";
-                var c = "<ul id=c" + post.id + " class='list-group list-group-flush' style='display: none;' > ";
-                comments.forEach(comment => {
-                    if (comment.postId == post.id) {
-                        c += "<li class='list-group-item'>" +
-                            "<div class='row g-0'>" +
-                            "<div class='col-md-2'>" +
-                            "<img src='https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png' class='img-fluid rounded-start' alt='' style='width:50px; hight:50px;'>" +
-                            "</div>" +
-                            "<div class='col-md-10'>" + comment.email + " <br> " + comment.name + " <br> " + comment.body + "</div></div></li>";
+
+                var c = "<div id=f" + album.id + " class='row row-cols-2 row-cols-md-3 g-4' style='display: none; margin: 0 20px 0 0;' > ";
+                photos.forEach(photo => {
+                    if (photo.albumId == album.id) {
+                        c += "<div class='col-2' style='margin: 0 2px 5px 2px;'>" +
+                            "<div class='card bg-dark text-white'>" +
+                            "<img class='card-img' src=" + photo.url + " alt='Card image' >" +
+                            "</div></div>";
                     }
                 });
 
-                c += "</ul>";
+                c += "</div>";
 
-                $("#listPosts").append(col);
-                $("#p" + post.id).append(c);
+                $("#listAlbums").append(col);
+                $("#p" + album.id).append(c);
             });
 
             $(".card-link").click(function () {
-                $("#c" + $(this).attr("id")).fadeToggle();
+                $("#f" + $(this).attr("id")).fadeToggle();
                 $("#s" + $(this).attr("id")).fadeToggle();
             })
 
@@ -133,11 +132,12 @@
         $(".page-item").click(function () {
             var page = $(this).children().text();
             var pageDim = 10;
-            $("#listPosts").empty();
-            getPosts(page, pageDim);
+            $("#listAlbums").empty();
+            getAlbums(page, pageDim);
             $(".page-item.active").toggleClass("active");
             $(this).addClass("active");
         });
+
 
 
     </script>
