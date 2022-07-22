@@ -85,7 +85,7 @@
 
                 },
                 error: function () {
-                    loadAlbumsError();
+                    loadPhotosError(albums, pageInit, pageDim);
                 }
             });
         }
@@ -136,6 +136,37 @@
                 "Albums not Found! 404 </div> ";
 
             $("#listAlbums").append(error);
+        }
+
+
+        function loadPhotosError(data, page, dim) {
+            var albums = data.slice((page - 1) * dim, page * dim);
+
+            albums.forEach(album => {
+                var col = "<div>" +
+                    "<div id=p" + album.id + " class='card mb-3 border-primary' style='width:100%; margin-left:auto; margin-right:auto;'>" +
+                    "<div class='card-body'>" +
+                    "<h5 class='card-title'>" + album.title + "</h5>" +
+                    "</div>" +
+                    "<div class='card-body' style='text-align:right;'>" +
+                    "<a href='#' id=" + album.id + " class='card-link'>Photos <svg id=s" + album.id + " xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-down-short' viewBox='0 0 16 16' style='display:none;'>" +
+                    "<path fill-rule='evenodd' d = 'M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z' /></svg ></a> " +
+                    "</div>" +
+                    "</div>" +
+                    "</div>";
+
+                var error = "<div id=f" + album.id + " class='alert alert-danger' style='display:none;' role='alert'>" +
+                    "Photos not Found! 404 </div> ";
+
+                $("#listAlbums").append(col);
+                $("#p" + album.id).append(error);
+            });
+
+            $(".card-link").click(function () {
+                $("#f" + $(this).attr("id")).fadeToggle();
+                $("#s" + $(this).attr("id")).fadeToggle();
+            })
+
         }
 
         $(".page-item").click(function () {

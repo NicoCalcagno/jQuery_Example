@@ -85,7 +85,7 @@
                     return comments;
                 },
                 error: function () {
-                    loadCommentsError();
+                    loadCommentsError(posts, pageInit, pageDim);
                 }
             });
         }
@@ -138,6 +138,35 @@
                 "Posts not Found! 404 </div> ";
 
             $("#listPosts").append(error);
+        }
+
+        function loadCommentsError(data, page, dim) {
+            var posts = data.slice((page - 1) * dim, page * dim);
+            //console.log(comments[0]);
+            posts.forEach(post => {
+                var col = "<div>" +
+                    "<div id=p" + post.id + " class='card mb-3 border-primary' style='width:100%; margin-left:auto; margin-right:auto;'>" +
+                    "<div class='card-body'>" +
+                    "<h5 class='card-title'>" + post.title + "</h5>" +
+                    "<p class='card-text'>" + post.body + "</p>" +
+                    "</div>" +
+                    "<div class='card-body' style='text-align:right;'>" +
+                    "<a href='#' id=" + post.id + " class='card-link'>Comments <svg id=s" + post.id + " xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-down-short' viewBox='0 0 16 16' style='display:none;'>" +
+                    "<path fill-rule='evenodd' d = 'M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z' /></svg ></a> " +
+                    "</div>" +
+                    "</div>" +
+                    "</div>";
+
+                var error = "<div id=c" + post.id + " class='alert alert-danger' style='display:none' role='alert'>" +
+                    "Comments not Found! 404 </div> ";
+
+                $("#listPosts").append(col);
+                $("#p" + post.id).append(error);
+            });
+            $(".card-link").click(function () {
+                $("#c" + $(this).attr("id")).fadeToggle();
+                $("#s" + $(this).attr("id")).fadeToggle();
+            })
         }
 
         $(".page-item").click(function () {
