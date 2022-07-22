@@ -25,6 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="albums.html">Albums</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="todos.html">Todos</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -79,11 +82,10 @@
                 method: 'GET',
                 success: function (data) {
                     loadAlbums(albums, pageInit, pageDim, data);
-                    var photos = data;
-                    return photos;
+
                 },
                 error: function () {
-                    loadPhotosError();
+                    loadAlbumsError();
                 }
             });
         }
@@ -92,7 +94,7 @@
 
         function loadAlbums(data, page, dim, photos) {
             var albums = data.slice((page - 1) * dim, page * dim);
-            //console.log(comments[0]);
+
             albums.forEach(album => {
                 var col = "<div>" +
                     "<div id=p" + album.id + " class='card mb-3 border-primary' style='width:100%; margin-left:auto; margin-right:auto;'>" +
@@ -127,6 +129,13 @@
                 $("#s" + $(this).attr("id")).fadeToggle();
             })
 
+        }
+
+        function loadAlbumsError() {
+            var error = "<div class='alert alert-danger' role='alert'>" +
+                "Albums not Found! 404 </div> ";
+
+            $("#listAlbums").append(error);
         }
 
         $(".page-item").click(function () {

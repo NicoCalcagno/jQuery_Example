@@ -25,6 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="albums.html">Albums</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="todos.html">Todos</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -118,6 +121,14 @@
                 $("#c" + $(this).attr("id")).hide();
                 $("#u" + $(this).attr("id")).fadeIn();
             })
+        }
+
+
+        function loadUsersError() {
+            var error = "<div class='alert alert-danger' role='alert'>" +
+                "Users not Found! 404 </div> ";
+
+            $("#listUsers").append(error);
         }
 
         $(".page-item").click(function () {

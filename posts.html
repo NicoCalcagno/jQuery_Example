@@ -25,6 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="albums.html">Albums</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="todos.html">Todos</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -128,6 +131,13 @@
                 $("#s" + $(this).attr("id")).fadeToggle();
             })
 
+        }
+
+        function loadPostsError() {
+            var error = "<div class='alert alert-danger' role='alert'>" +
+                "Posts not Found! 404 </div> ";
+
+            $("#listPosts").append(error);
         }
 
         $(".page-item").click(function () {
